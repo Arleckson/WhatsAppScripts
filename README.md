@@ -43,7 +43,7 @@ The function may throw an error if no conversation is open. Ensure that a conver
 
 `enviarScript(script, 2000)`
 
-## Example: --New functional method 2026 [PT/BR]
+## Exemplo: --Novo Metodo funcional 2026 - [PT/BR]
 
 ```javascript
 // Aguarda um elemento aparecer no DOM (necessário para React / WhatsApp Web)
@@ -136,6 +136,7 @@ enviarScript(script, 2000)
 
 ## Example: --New functional method 2026 - [ENG/US]
 
+```javascript
 // Waits for an element to appear in the DOM (required for React / WhatsApp Web)
 function waitForElement(selector, root = document, timeout = 5000) {
     return new Promise((resolve, reject) => {
