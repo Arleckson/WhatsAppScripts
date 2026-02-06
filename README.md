@@ -223,7 +223,7 @@ any text here.
 enviarScript(script, 2000)
     .then(qtd => console.log(`Finished: ${qtd} messages sent`))
     .catch(console.error);
-
+```
 
 In this example, the `enviarScript` function is called with a multi-line script, and the completion message or error is logged to the console.
 
