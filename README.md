@@ -8,7 +8,7 @@
 - [Parameters](#parameters)
 - [Error Handling](#error-handling)
 - [Example](#example)
-- [Shipping Speed](#Shipping Speed)
+- [Shipping Speed](#Shipping-Speed)
 
 ## Overview
 
