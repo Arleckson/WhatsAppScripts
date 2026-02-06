@@ -39,19 +39,95 @@ Before using the `enviarScript` function, ensure the following:
 
 The function may throw an error if no conversation is open. Ensure that a conversation is active in the DOM before calling the function.
 
-## Example
+## Example: --New functional method 2026
 
 ```javascript
-// Example script to be sent
+// Aguarda um elemento aparecer no DOM (necessário para React / WhatsApp Web)
+function waitForElement(selector, root = document, timeout = 5000) {
+    return new Promise((resolve, reject) => {
+        const element = root.querySelector(selector);
+        if (element) return resolve(element);
+
+        const observer = new MutationObserver(() => {
+            const el = root.querySelector(selector);
+            if (el) {
+                observer.disconnect();
+                resolve(el);
+            }
+        });
+
+        observer.observe(root, {
+            childList: true,
+            subtree: true
+        });
+
+        setTimeout(() => {
+            observer.disconnect();
+            reject(new Error(`Elemento não encontrado: ${selector}`));
+        }, timeout);
+    });
+}
+
+// Função principal de envio
+async function enviarScript(scriptText, delay = 2000) {
+    const lines = scriptText
+        .split('\n')
+        .map(l => l.trim())
+        .filter(Boolean);
+
+    const main = document.querySelector("#main");
+    if (!main) throw new Error("Elemento #main não encontrado");
+
+    const textarea = main.querySelector('div[contenteditable="true"]');
+    if (!textarea) throw new Error("Não há conversa aberta");
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        console.log(`Enviando (${i + 1}/${lines.length}):`, line);
+
+        // Insere o texto
+        textarea.focus();
+        document.execCommand('insertText', false, line);
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+        // Espera o botão de enviar aparecer
+        const sendButton = await waitForElement(
+            '[data-testid="send"], [data-icon="send"], button[aria-label="Enviar"]',
+            main,
+            3000
+        );
+
+        await new Promise(r => setTimeout(r, 150));
+
+        // Clica no botão (sem Enter)
+        sendButton.click();
+
+        if (i < lines.length - 1) {
+            await new Promise(r => setTimeout(r, delay));
+        }
+    }
+
+    return lines.length;
+}
+
+// ===============================
+// ✏️ EDITE SEU TEXTO AQUI
+// ===============================
 const script = `
-Coloque o seu texto aqui
-Put your text here
+COLOQUE SEU TEXTO AQUI
+
+Cada linha será enviada
+como uma mensagem separada.
+
+Você pode colar
+qualquer texto aqui.
 `;
 
-// Calling the enviarScript function
+// ▶️ EXECUÇÃO
 enviarScript(script, 2000)
-    .then(e => console.log(`Código finalizado, ${e} mensagens enviadas`))
+    .then(qtd => console.log(`Código finalizado: ${qtd} mensagens enviadas`))
     .catch(console.error);
+
 ```
 
 In this example, the `enviarScript` function is called with a multi-line script, and the completion message or error is logged to the console.
