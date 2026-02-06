@@ -8,6 +8,7 @@
 - [Parameters](#parameters)
 - [Error Handling](#error-handling)
 - [Example](#example)
+- [Shipping Speed](#Shipping Speed)
 
 ## Overview
 
@@ -39,7 +40,7 @@ Before using the `enviarScript` function, ensure the following:
 
 The function may throw an error if no conversation is open. Ensure that a conversation is active in the DOM before calling the function.
 
-## SHIPPING SPEED
+## Shipping Speed
 
 `enviarScript(script, 2000)`
 
